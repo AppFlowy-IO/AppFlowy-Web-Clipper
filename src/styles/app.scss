@@ -1,0 +1,54 @@
+@use "src/styles/mixin.scss";
+
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+
+::root {
+	--popup-width: 350px;
+	--popup-width-expanded: 500px;
+	--popup-height: 540px;
+	--popup-max-height: 540px;
+	--chromium-popup-height: 540px;
+}
+
+.login-page {
+  height: max(var(--chromium-popup-height), 100vh);
+	width: var(--popup-width);
+  padding: 16px;
+  scrollbar-width: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup-container {
+	max-height: 100%;
+  height: max(var(--chromium-popup-height), 100vh);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	transition: width 0.1s ease-in-out;
+  &::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+
+body {
+  // FIXME: use 350px
+  width: 600px; 
+  ::selection {
+    @apply bg-content-blue-100;
+  }
+
+  @apply bg-bg-body text-text-title;
+
+}
+
+
+
+.icon {
+  font-family: 'Apple Color Emoji', 'Noto Color Emoji', 'Segoe UI Emoji', 'Twemoji Mozilla', sans-serif;
+}

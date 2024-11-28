@@ -1,37 +1,17 @@
 import { ReactComponent as Logo } from '@/assets/common/logo.svg';
-import { useEffect, useContext } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { RCApplicationContext } from '@/components/app/AppContextProvider';
+import { useEffect } from 'react';
 import MagicLink from '@/components/login/MagicLink';
 import LoginProvider from '@/components/login/LoginProvider';
 import { Divider } from '@mui/material';
 import i18next from 'i18next';
+import { AUTH_CALLBACK_URL } from '@/services/user_service_impl';
 
 export function LoginPage() {
-  const redirectTo = useLoginRedirect();
   return (
     <div className="login-page">
-        <Login redirectTo={redirectTo} />
+      <Login redirectTo={AUTH_CALLBACK_URL} />
     </div>
   );
-}
-
-export function useLoginRedirect() {
-  const [search] = useSearchParams();
-  const redirectTo = search.get('redirectTo') || '';
-  const isAuthenticated = useContext(RCApplicationContext)?.isAuthenticated || false;
-
-  useEffect(() => {
-    if (
-      isAuthenticated &&
-      redirectTo &&
-      decodeURIComponent(redirectTo) !== window.location.href
-    ) {
-      window.location.href = decodeURIComponent(redirectTo);
-    }
-  }, [isAuthenticated, redirectTo]);
-
-  return redirectTo;
 }
 
 export function Login({ redirectTo }: { redirectTo: string }) {

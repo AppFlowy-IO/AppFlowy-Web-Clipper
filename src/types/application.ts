@@ -1,8 +1,8 @@
-import { UserSession, UserHttpService } from '@/types';
+import { UserSession, UserAuthService } from '@/types';
 
 export interface ApplicationContext {
   isAuthenticated: boolean;
-  httpService: UserHttpService | undefined;
+  httpService: UserAuthService | undefined;
   userSession: UserSession | undefined;
   showLoginPage: (redirectTo?: string) => void;
 }

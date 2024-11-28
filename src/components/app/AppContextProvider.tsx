@@ -1,6 +1,6 @@
 import { createContext, useEffect, useMemo, useState, useCallback, Suspense } from 'react';
 import { ApplicationConfig } from '@/types';
-import { ClientServicesImpl, UserSessionImpl } from '@/services/user';
+import { ClientServicesImpl, UserSessionImpl } from '@/services/user_service_impl';
 import { ApplicationContext } from '@/types';
 import { hasToken } from '@/services/session';
 import { on } from '@/services/session/event';
@@ -27,7 +27,6 @@ function ApplicationContextProvider({
 
   const [loginOpen, setLoginOpen] = useState(false);
   const showLoginPage = useCallback((redirectTo?: string) => {
-
     if (process.env.NODE_ENV === 'development') {
       console.log('Redirect to URL:', redirectTo);
     }

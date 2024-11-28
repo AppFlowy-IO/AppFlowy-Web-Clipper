@@ -1,11 +1,17 @@
-import { ApplicationConfig, UserHttpService, UserSession } from '@/types';
+import {
+  AIService,
+  ApplicationConfig,
+  CompleteTextData,
+  UserService,
+  UserSession,
+} from '@/types';
 import axios, { AxiosInstance } from 'axios';
 import { saveRefreshTokenToLocalStorage } from '@/services/session';
 
 export const AUTH_CALLBACK_PATH = '/auth/callback';
 export const AUTH_CALLBACK_URL = `${window.location.origin}${AUTH_CALLBACK_PATH}`;
 
-export class ClientServicesImpl implements UserHttpService {
+export class ClientServicesImpl implements UserService, AIService {
   private baseClient: AxiosInstance;
   private gotrueClient: AxiosInstance;
 
@@ -13,7 +19,6 @@ export class ClientServicesImpl implements UserHttpService {
     if (process.env.NODE_ENV !== 'production') {
       console.log('API Client Config', config);
     }
-
 
     this.baseClient = axios.create({
       baseURL: config.baseUrl,
@@ -123,9 +128,11 @@ export class ClientServicesImpl implements UserHttpService {
 
     return res?.data;
   }
-  async signInGoogle() {
+
+  @withSignIn()
+  async signInGoogle(params: { redirectTo: string }) {
     const provider = 'google';
-    const redirectTo = encodeURIComponent(AUTH_CALLBACK_URL);
+    const redirectTo = encodeURIComponent(params.redirectTo);
     const accessType = 'offline';
     const prompt = 'consent';
     const baseURL = this.gotrueClient?.defaults.baseURL;
@@ -133,6 +140,8 @@ export class ClientServicesImpl implements UserHttpService {
 
     window.open(url, '_current');
   }
+
+  @withSignIn()
   async signInGithub(params: { redirectTo: string }) {
     const provider = 'github';
     const redirectTo = encodeURIComponent(params.redirectTo);
@@ -141,6 +150,8 @@ export class ClientServicesImpl implements UserHttpService {
 
     window.open(url, '_current');
   }
+
+  @withSignIn()
   async signInDiscord(params: { redirectTo: string }) {
     const provider = 'discord';
     const redirectTo = encodeURIComponent(params.redirectTo);
@@ -149,6 +160,8 @@ export class ClientServicesImpl implements UserHttpService {
 
     window.open(url, '_current');
   }
+
+  @withSignIn()
   async signInApple(params: { redirectTo: string }) {
     const provider = 'apple';
     const redirectTo = encodeURIComponent(params.redirectTo);
@@ -161,7 +174,6 @@ export class ClientServicesImpl implements UserHttpService {
   async getCurrentUser() {
     // const token = getTokenFromLocalStorage();
     // const userId = token?.user?.id;
-
     const url = '/api/user/profile';
     const response = await this.baseClient.get<{
       code: number;
@@ -197,18 +209,60 @@ export class ClientServicesImpl implements UserHttpService {
 
     return Promise.reject(data);
   }
+
+  async streamCompletionText(params: {
+    workspaceId: string;
+    data: CompleteTextData;
+  }): Promise<ReadableStream<String>> {
+    const url = `/api/ai/${params.workspaceId}/complete/stream`;
+
+    try {
+      const response = await this.baseClient.post(url, params.data, {
+        responseType: 'stream',
+      });
+      const reader = response.data.getReader();
+      const stream = new ReadableStream<string>({
+        async start(controller) {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            // Convert Uint8Array to string
+            const text = new TextDecoder().decode(value);
+            controller.enqueue(text);
+          }
+          controller.close();
+        },
+      });
+
+      return stream;
+    } catch (error) {
+      console.error('Error streaming completion text:', error);
+      throw error;
+    }
+  }
 }
 
-export class UserSessionImpl implements UserSession {
-  getRedirectTo(): string | null {
-    return localStorage.getItem('redirectTo');
-  }
+export class UserSessionImpl implements UserSession {}
 
-  setRedirectTo(redirectTo: string): void {
-    localStorage.setItem('redirectTo', redirectTo);
-  }
+export function withSignIn() {
+  return function (
+    // eslint-disable-next-line
+    _target: any,
+    _propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
+    const originalMethod = descriptor.value;
 
-  clearRedirectTo() {
-    localStorage.removeItem('redirectTo');
-  }
+    // eslint-disable-next-line
+    descriptor.value = async function (args: { redirectTo: string }) {
+      try {
+        await originalMethod.apply(this, [args]);
+      } catch (e) {
+        console.error(e);
+        return Promise.reject(e);
+      }
+    };
+
+    return descriptor;
+  };
 }

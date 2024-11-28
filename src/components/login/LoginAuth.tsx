@@ -1,18 +1,17 @@
-import { NormalModal } from '@/components/shared/modal';
 import LinearBuffer from '@/components/login/LinearBuffer';
 import { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ReactComponent as ErrorIcon } from '@/assets/common/error.svg';
-import i18next from 'i18next';
 import { RCApplicationContext } from '@/components/app/AppContextProvider';
+import { useNavigate } from 'react-router-dom';
+import { EventType } from '@/services/session';
+import { emit } from '@/services/session';
 
 function LoginAuth () {
   const httpService = useContext(RCApplicationContext)?.httpService;
-  const userSession = useContext(RCApplicationContext)?.userSession;
   const [loading, setLoading] = useState<boolean>(false);
-  const [modalOpened, setModalOpened] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const openLoginModal = useContext(RCApplicationContext)?.showLoginPage;
+  //FIXME: show error message
+  const [_, setError] = useState<string | null>(null);
+  const showLoginPage = useContext(RCApplicationContext)?.showLoginPage;
+  const navigate = useNavigate();
 
   useEffect(() => {
     void (async () => {
@@ -20,16 +19,16 @@ function LoginAuth () {
       setError(null);
       try {
         await httpService?.loginAuth(window.location.href);
-        // eslint-disable-next-line
+        emit(EventType.SESSION_VALID);
       } catch (e: any) {
         setError(e.message);
-        setModalOpened(true);
+        showLoginPage?.();
       } finally {
         setLoading(false);
+        navigate('/');
       }
     })();
   }, [httpService]);
-  const navigate = useNavigate();
 
   return <>
     {loading ? (
@@ -37,32 +36,6 @@ function LoginAuth () {
         <LinearBuffer />
       </div>
     ) : null}
-    <NormalModal
-      PaperProps={{
-        sx: {
-          minWidth: 400,
-        },
-      }}
-      onCancel={() => {
-        setModalOpened(false);
-        navigate('/');
-      }}
-      closable={false}
-      cancelText={i18next.t('button.backToHome') || 'Back to'}
-      onOk={() => {
-        openLoginModal?.(userSession?.getRedirectTo() || window.location.origin);
-      }}
-      okText={i18next.t('button.tryAgain') || 'Try again'}
-      title={<div className={'text-left font-bold flex gap-2 items-center'}>
-        <ErrorIcon className={'w-5 h-5 text-function-error'} />
-        Login failed
-      </div>}
-      open={modalOpened}
-    >
-      <div className={'text-text-title flex flex-col text-sm gap-1 whitespace-pre-wrap break-words'}>
-        {error}
-      </div>
-    </NormalModal>
   </>;
 }
 

@@ -41,7 +41,7 @@ function LoginProvider ({ redirectTo }: { redirectTo: string }) {
     try {
       switch (option) {
         case 'google':
-          await userService?.signInGoogle();
+          await userService?.signInGoogle({ redirectTo });
           break;
         case 'apple':
           await userService?.signInApple({ redirectTo });

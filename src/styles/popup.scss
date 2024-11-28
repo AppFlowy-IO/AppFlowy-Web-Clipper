@@ -1,0 +1,71 @@
+
+:root {
+	--popup-width: 350px;
+	--popup-width-expanded: 500px;
+	--popup-height: 540px;
+	--popup-max-height: 540px;
+	--chromium-popup-height: 540px;
+}
+
+
+.popup-container {
+	max-height: 100%;
+  height: max(var(--chromium-popup-height), 100vh);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	transition: width 0.1s ease-in-out;
+  &::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+.popup-header {
+	display: flex;
+	flex-direction: row;
+	padding: calc(var(--popup-padding) * 0.5) calc(var(--popup-padding) * 0.5) 0;
+	align-items: center;
+	gap: 2px;
+}
+
+
+.popup-actions {
+	z-index: 100;
+	justify-self: flex-end;
+	align-items: center;
+	margin-left: auto;
+	user-select: none;
+	-webkit-user-select: none;
+	background-color: var(--background-primary);
+	display: flex;
+	flex-direction: row;
+	gap: 2px;
+	.clickable-icon {
+		border-radius: var(--radius-m);
+		user-select: none;
+		-webkit-user-select: none;
+		background-color: transparent;
+		cursor: default;
+		&.active {
+			background-color: hsla(var(--color-accent-hsl), 0.075);
+			color: var(--text-accent);
+		}
+		@media (hover: hover) {
+			&:hover {
+				background-color: var(--background-modifier-hover);
+				transition: background-color var(--duration-fast) ease-in-out;
+			}
+			&.active:hover {
+				background-color: hsla(var(--color-accent-hsl), 0.15);
+			}
+		}
+	}
+}
+
+.template-container {
+	flex-grow: 1;
+	select {
+		width: 100%;
+	}
+}
+

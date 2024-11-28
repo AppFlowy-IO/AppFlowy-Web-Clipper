@@ -1,10 +1,14 @@
 import { ReactComponent as Logo } from '@/assets/common/logo.svg';
-import { useEffect } from 'react';
+import { useCallback, useContext, useEffect, } from 'react';
 import MagicLink from '@/components/login/MagicLink';
 import LoginProvider from '@/components/login/LoginProvider';
 import { Divider } from '@mui/material';
 import i18next from 'i18next';
-import { AUTH_CALLBACK_URL } from '@/services/user_service_impl';
+import {  AUTH_CALLBACK_URL } from '@/services/service_impl';
+import { RCApplicationContext } from '../app/AppContextProvider';
+import { emit } from '@/services/session';
+import { EventType } from '@/services/session';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
   return (
@@ -15,6 +19,26 @@ export function LoginPage() {
 }
 
 export function Login({ redirectTo }: { redirectTo: string }) {
+  const httpService = useContext(RCApplicationContext)?.userHttpService;
+  const showLoginPage = useContext(RCApplicationContext)?.showLoginPage;
+  const navigate = useNavigate();
+
+  const loginCallback = useCallback(async (url: string) => {
+    try {
+        await httpService?.loginAuth(url);
+        emit(EventType.SESSION_VALID);
+      } catch (e: any) {
+        console.error(e);
+
+        emit(EventType.SESSION_INVALID);
+        showLoginPage?.();
+      } finally {
+        navigate('/');
+      }
+
+
+  }, [httpService]);
+
   useEffect(() => {
     if (process.env.NODE_ENV === 'development') {
       console.log('Redirect to URL:', redirectTo);
@@ -30,8 +54,10 @@ export function Login({ redirectTo }: { redirectTo: string }) {
         {i18next.t('web.or')}
         <Divider className="flex-1 border-line-divider" />
       </div>
-      <LoginProvider redirectTo={redirectTo} />
+      <LoginProvider redirectTo={redirectTo} callback={loginCallback} />
       <TermsSection />
+
+      
     </div>
   );
 }

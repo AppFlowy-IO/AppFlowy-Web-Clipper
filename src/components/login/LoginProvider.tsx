@@ -8,7 +8,7 @@ import { ReactComponent as DiscordSvg } from '@/assets/login/discord.svg';
 import { ReactComponent as AppleSvg } from '@/assets/login/apple.svg';
 import i18next from 'i18next';
 
-function LoginProvider ({ redirectTo }: { redirectTo: string }) {
+function LoginProvider ({ redirectTo, callback }: { redirectTo: string; callback: (url: string) => Promise<void> }) {
   const [expand, setExpand] = React.useState(false);
   const options = useMemo(
     () => [
@@ -35,23 +35,27 @@ function LoginProvider ({ redirectTo }: { redirectTo: string }) {
     ],
     [],
   );
-  const userService = useContext(RCApplicationContext)?.httpService;
+  const userService = useContext(RCApplicationContext)?.userHttpService;
 
   const handleClick = useCallback(async (option: string) => {
     try {
+      let url;
       switch (option) {
         case 'google':
-          await userService?.signInGoogle({ redirectTo });
+          url = await userService?.signInGoogle({ redirectTo });
           break;
         case 'apple':
-          await userService?.signInApple({ redirectTo });
+          url = await userService?.signInApple({ redirectTo });
           break;
         case 'github':
-          await userService?.signInGithub({ redirectTo });
+          url = await userService?.signInGithub({ redirectTo });
           break;
         case 'discord':
-          await userService?.signInDiscord({ redirectTo });
+          url = await userService?.signInDiscord({ redirectTo });
           break;
+      }
+      if (url) {
+        await callback(url);
       }
     } catch (e) {
       notify.error(i18next.t('web.signInError'));

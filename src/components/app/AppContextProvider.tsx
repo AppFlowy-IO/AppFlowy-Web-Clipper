@@ -1,6 +1,6 @@
 import { createContext, useEffect, useMemo, useState, useCallback, Suspense } from 'react';
 import { ApplicationConfig } from '@/types';
-import { ClientServicesImpl, UserSessionImpl } from '@/services/user_service_impl';
+import { ClientServicesImpl, UserSessionImpl } from '@/services/service_impl';
 import { ApplicationContext } from '@/types';
 import { hasToken } from '@/services/session';
 import { on } from '@/services/session/event';
@@ -50,7 +50,7 @@ function ApplicationContextProvider({
     <RCApplicationContext.Provider
       value={{
         isAuthenticated,
-        httpService: serviceImpl,
+        userHttpService: serviceImpl,
         userSession: userSession,
         showLoginPage: showLoginPage,
       }}

@@ -6,7 +6,7 @@ import { EventType } from '@/services/session';
 import { emit } from '@/services/session';
 
 function LoginAuth () {
-  const httpService = useContext(RCApplicationContext)?.httpService;
+  const httpService = useContext(RCApplicationContext)?.userHttpService;
   const [loading, setLoading] = useState<boolean>(false);
   //FIXME: show error message
   const [_, setError] = useState<string | null>(null);
@@ -22,6 +22,8 @@ function LoginAuth () {
         emit(EventType.SESSION_VALID);
       } catch (e: any) {
         setError(e.message);
+
+        emit(EventType.SESSION_INVALID);
         showLoginPage?.();
       } finally {
         setLoading(false);

@@ -7,16 +7,16 @@ export interface User {
   latestWorkspaceId: string;
 }
 
-export interface UserService {
+export interface UserHttpService {
   loginAuth: (url: string) => Promise<void>;
   signInMagicLink: (params: {
     email: string;
     redirectTo: string;
   }) => Promise<void>;
-  signInGoogle: (params: { redirectTo: string }) => Promise<void>;
-  signInGithub: (params: { redirectTo: string }) => Promise<void>;
-  signInDiscord: (params: { redirectTo: string }) => Promise<void>;
-  signInApple: (params: { redirectTo: string }) => Promise<void>;
+  signInGoogle: (params: { redirectTo: string }) => Promise<string>;
+  signInGithub: (params: { redirectTo: string }) => Promise<string>;
+  signInDiscord: (params: { redirectTo: string }) => Promise<string>;
+  signInApple: (params: { redirectTo: string }) => Promise<string>;
   getCurrentUser: () => Promise<User>;
 }
 

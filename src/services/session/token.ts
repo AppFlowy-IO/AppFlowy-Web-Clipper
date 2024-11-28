@@ -3,7 +3,6 @@ import { emit, EventType } from './event';
 export function saveRefreshTokenToLocalStorage(token: string) {
   localStorage.removeItem('token');
   localStorage.setItem('token', token);
-  emit(EventType.SESSION_REFRESH, token);
 }
 
 export function invalidToken() {

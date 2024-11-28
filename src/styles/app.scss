@@ -18,8 +18,8 @@
 
 
 body {
-  // FIXME: use 350px
-  width: 600px; 
+  // FIXME: use 350px seems not working.
+  width: 1200px; 
   ::selection {
     @apply bg-content-blue-100;
   }

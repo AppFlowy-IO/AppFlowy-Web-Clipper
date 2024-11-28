@@ -8,7 +8,7 @@ import i18next from 'i18next';
 function MagicLink ({ redirectTo }: { redirectTo: string }) {
   const [email, setEmail] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
-  const httpService = useContext(RCApplicationContext)?.httpService;
+  const httpService = useContext(RCApplicationContext)?.userHttpService;
   const handleSubmit = async () => {
     const isValidEmail = isEmail(email);
 

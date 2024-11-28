@@ -19,6 +19,16 @@
     "background": {
         "service_worker": "background.js"
     },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "images/icon.png"
+            ],
+            "matches": [
+                "<all_urls>"
+            ]
+        }
+    ],
     "content_scripts": [
         {
             "matches": [
@@ -33,7 +43,11 @@
     "permissions": [
         "storage",
         "tabs",
-        "scripting"
+        "scripting",
+        "identity"
+    ],
+    "host_permissions": [
+        "https://*.google.com/"
     ],
     "homepage_url": "https://appflowy.io"
 }

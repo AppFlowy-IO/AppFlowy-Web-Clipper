@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate,  BrowserRouter } from 'react-router-dom';
+import { Routes, Route, Navigate,  HashRouter } from 'react-router-dom';
 import ApplicationContextProvider from '@/components/app/AppContextProvider';
 import { Suspense } from 'react';
 import { Popup } from '@/components/popup';
@@ -7,7 +7,7 @@ import { LoginPage } from '@/components/login';
 import '@/styles/app.scss';
 
 import LoginAuth from '@/components/login/LoginAuth';
-import { AUTH_CALLBACK_PATH } from '@/services/user_service_impl';
+import { AUTH_CALLBACK_PATH } from '@/services/service_impl';
 import AppTheme from './AppTheme';
 import { useTranslation } from 'react-i18next';
 export function App(): JSX.Element {
@@ -31,11 +31,11 @@ function AppContainer({ children }: { children: React.ReactNode }): JSX.Element 
   // FIXME: It seems like chrome extension only support HashRouter, but HashRouter
   // is not supported for login redirect
   return (
-    <BrowserRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+    <HashRouter future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
       <AppTheme>
         <ApplicationContextProvider>{children}</ApplicationContextProvider>
       </AppTheme>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

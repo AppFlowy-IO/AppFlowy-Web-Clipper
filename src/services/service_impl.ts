@@ -2,16 +2,18 @@ import {
   AIService,
   ApplicationConfig,
   CompleteTextData,
-  UserService,
+  UserHttpService,
   UserSession,
 } from '@/types';
 import axios, { AxiosInstance } from 'axios';
-import { saveRefreshTokenToLocalStorage } from '@/services/session';
+import { emit, EventType, getTokenFromLocalStorage, invalidToken, saveRefreshTokenToLocalStorage } from '@/services/session';
+import dayjs from 'dayjs';
+import browser from 'webextension-polyfill';
 
 export const AUTH_CALLBACK_PATH = '/auth/callback';
 export const AUTH_CALLBACK_URL = `${window.location.origin}${AUTH_CALLBACK_PATH}`;
 
-export class ClientServicesImpl implements UserService, AIService {
+export class ClientServicesImpl implements UserHttpService, AIService {
   private baseClient: AxiosInstance;
   private gotrueClient: AxiosInstance;
 
@@ -20,6 +22,13 @@ export class ClientServicesImpl implements UserService, AIService {
       console.log('API Client Config', config);
     }
 
+    this.gotrueClient = axios.create({
+      baseURL: config.gotrueUrl,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
     this.baseClient = axios.create({
       baseURL: config.baseUrl,
       headers: {
@@ -27,11 +36,57 @@ export class ClientServicesImpl implements UserService, AIService {
       },
     });
 
-    this.gotrueClient = axios.create({
-      baseURL: config.gotrueUrl,
-      headers: {
-        'Content-Type': 'application/json',
+    this.baseClient.interceptors.request.use(
+      async (config) => {
+        const token = getTokenFromLocalStorage();
+        if (!token) {
+          // If no token, proceed with the request as is
+          return config;
+        }
+ 
+        // Check if the token is expired
+        const isExpired = dayjs().isAfter(dayjs.unix(token.expires_at));
+        let access_token = token.access_token;
+        const refresh_token = token.refresh_token;
+        if (isExpired) {
+          // If the token is expired, refresh it
+          const newToken = await this.refreshToken(refresh_token);
+          access_token = newToken?.access_token || '';
+        }
+  
+        // If the token is valid, add it to the headers
+        if (access_token) {
+          Object.assign(config.headers, {
+            Authorization: `Bearer ${access_token}`,
+          });
+        }
+        return config;
       },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
+  
+
+    this.baseClient.interceptors.response.use(async (response) => {
+      const status = response.status;
+      // Handle 401 Unauthorized status
+      if (status === 401) {
+        const token = getTokenFromLocalStorage();
+          if (!token) {
+          invalidToken();
+          return response;
+        }
+  
+        const refresh_token = token.refresh_token;
+        try {
+           // Attempt to refresh the token
+          await this.refreshToken(refresh_token);
+        } catch (e) {
+          invalidToken();
+        }
+      }
+      return response;
     });
   }
 
@@ -100,6 +155,8 @@ export class ClientServicesImpl implements UserService, AIService {
 
       try {
         await saveRefreshTokenToLocalStorage(refresh_token);
+        emit(EventType.SESSION_REFRESH, refresh_token);
+
       } catch (e) {
         return Promise.reject({
           code: -1,
@@ -130,50 +187,66 @@ export class ClientServicesImpl implements UserService, AIService {
   }
 
   @withSignIn()
-  async signInGoogle(params: { redirectTo: string }) {
+  async signInGoogle(params: { redirectTo: string }): Promise<string> {
     const provider = 'google';
     const redirectTo = encodeURIComponent(params.redirectTo);
     const accessType = 'offline';
     const prompt = 'consent';
     const baseURL = this.gotrueClient?.defaults.baseURL;
     const url = `${baseURL}/authorize?provider=${provider}&redirect_to=${redirectTo}&access_type=${accessType}&prompt=${prompt}`;
+    const redirectResult = await browser.identity.launchWebAuthFlow({
+      url: url,
+      interactive: true,
+    });
+    // FIXME: redirectResult failed with message: Authorization page could not be loaded.
 
-    window.open(url, '_current');
+    return redirectResult;
+
   }
 
   @withSignIn()
-  async signInGithub(params: { redirectTo: string }) {
+  async signInGithub(params: { redirectTo: string }): Promise<string> {
     const provider = 'github';
     const redirectTo = encodeURIComponent(params.redirectTo);
     const baseURL = this.gotrueClient.defaults.baseURL;
     const url = `${baseURL}/authorize?provider=${provider}&redirect_to=${redirectTo}`;
+    const redirectResult = await browser.identity.launchWebAuthFlow({
+      url: url,
+      interactive: true,
+    });
 
-    window.open(url, '_current');
+    return redirectResult;
   }
 
   @withSignIn()
-  async signInDiscord(params: { redirectTo: string }) {
+  async signInDiscord(params: { redirectTo: string }): Promise<string> {
     const provider = 'discord';
     const redirectTo = encodeURIComponent(params.redirectTo);
     const baseURL = this.gotrueClient.defaults.baseURL;
     const url = `${baseURL}/authorize?provider=${provider}&redirect_to=${redirectTo}`;
+    const redirectResult = await browser.identity.launchWebAuthFlow({
+      url: url,
+      interactive: true,
+    });
 
-    window.open(url, '_current');
+    return redirectResult;
   }
 
   @withSignIn()
-  async signInApple(params: { redirectTo: string }) {
+  async signInApple(params: { redirectTo: string }): Promise<string> {
     const provider = 'apple';
     const redirectTo = encodeURIComponent(params.redirectTo);
     const baseURL = this.gotrueClient.defaults.baseURL;
     const url = `${baseURL}/authorize?provider=${provider}&redirect_to=${redirectTo}`;
+    const redirectResult = await browser.identity.launchWebAuthFlow({
+      url: url,
+      interactive: true,
+    });
 
-    window.open(url, '_current');
+    return redirectResult;
   }
 
   async getCurrentUser() {
-    // const token = getTokenFromLocalStorage();
-    // const userId = token?.user?.id;
     const url = '/api/user/profile';
     const response = await this.baseClient.get<{
       code: number;
@@ -215,7 +288,6 @@ export class ClientServicesImpl implements UserService, AIService {
     data: CompleteTextData;
   }): Promise<ReadableStream<String>> {
     const url = `/api/ai/${params.workspaceId}/complete/stream`;
-
     try {
       const response = await this.baseClient.post(url, params.data, {
         responseType: 'stream',

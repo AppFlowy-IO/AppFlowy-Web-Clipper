@@ -6,7 +6,13 @@ import {
   UserSession,
 } from '@/types';
 import axios, { AxiosInstance } from 'axios';
-import { emit, EventType, getTokenFromLocalStorage, invalidToken, saveRefreshTokenToLocalStorage } from '@/services/session';
+import {
+  emit,
+  EventType,
+  getTokenFromLocalStorage,
+  invalidToken,
+  saveRefreshTokenToLocalStorage,
+} from '@/services/session';
 import dayjs from 'dayjs';
 import browser from 'webextension-polyfill';
 
@@ -38,12 +44,12 @@ export class ClientServicesImpl implements UserHttpService, AIService {
 
     this.baseClient.interceptors.request.use(
       async (config) => {
-        const token = getTokenFromLocalStorage();
+        const token = await getTokenFromLocalStorage();
         if (!token) {
           // If no token, proceed with the request as is
           return config;
         }
- 
+
         // Check if the token is expired
         const isExpired = dayjs().isAfter(dayjs.unix(token.expires_at));
         let access_token = token.access_token;
@@ -53,7 +59,7 @@ export class ClientServicesImpl implements UserHttpService, AIService {
           const newToken = await this.refreshToken(refresh_token);
           access_token = newToken?.access_token || '';
         }
-  
+
         // If the token is valid, add it to the headers
         if (access_token) {
           Object.assign(config.headers, {
@@ -64,23 +70,22 @@ export class ClientServicesImpl implements UserHttpService, AIService {
       },
       (error) => {
         return Promise.reject(error);
-      },
+      }
     );
-  
 
     this.baseClient.interceptors.response.use(async (response) => {
       const status = response.status;
       // Handle 401 Unauthorized status
       if (status === 401) {
-        const token = getTokenFromLocalStorage();
-          if (!token) {
+        const token = await getTokenFromLocalStorage();
+        if (!token) {
           invalidToken();
           return response;
         }
-  
+
         const refresh_token = token.refresh_token;
         try {
-           // Attempt to refresh the token
+          // Attempt to refresh the token
           await this.refreshToken(refresh_token);
         } catch (e) {
           invalidToken();
@@ -156,7 +161,6 @@ export class ClientServicesImpl implements UserHttpService, AIService {
       try {
         await saveRefreshTokenToLocalStorage(refresh_token);
         emit(EventType.SESSION_REFRESH, refresh_token);
-
       } catch (e) {
         return Promise.reject({
           code: -1,
@@ -201,7 +205,6 @@ export class ClientServicesImpl implements UserHttpService, AIService {
     // FIXME: redirectResult failed with message: Authorization page could not be loaded.
 
     return redirectResult;
-
   }
 
   @withSignIn()

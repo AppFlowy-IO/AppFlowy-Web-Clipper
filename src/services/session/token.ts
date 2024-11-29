@@ -1,3 +1,4 @@
+import { storage } from 'webextension-polyfill';
 import { emit, EventType } from './event';
 
 export function saveRefreshTokenToLocalStorage(token: string) {
@@ -10,15 +11,17 @@ export function invalidToken() {
   emit(EventType.SESSION_INVALID);
 }
 
-export function hasToken() {
-  return !!localStorage.getItem('token');
+export async function hasToken() {
+  let storage_data: any = await storage.local.get(['token']);
+  return !!storage_data.token;
 }
 
-export function getToken() {
-  return localStorage.getItem('token');
+export async function getToken() {
+  let storage_data: any = await storage.local.get(['token']);
+  return storage_data.token;
 }
 
-export function getTokenFromLocalStorage(): {
+export async function getTokenFromLocalStorage(): Promise<{
   access_token: string;
   expires_at: number;
   refresh_token: string;
@@ -26,8 +29,8 @@ export function getTokenFromLocalStorage(): {
     id: string;
     email: string;
   };
-} | null {
-  const token = getToken();
+} | null> {
+  const token = await getToken();
 
   if (!token) {
     return null;

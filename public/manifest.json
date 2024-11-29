@@ -1,53 +1,37 @@
 {
-    "name": "AppFlowyWebClipper",
-    "description": "AppFlowy Web Clipper",
-    "version": "0.0.1",
-    "manifest_version": 3,
-    "icons": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-        "128": "icon128.png"
-    },
-    "action": {
-        "default_popup": "index.html",
-        "default_icon": {
-            "16": "icon16.png",
-            "48": "icon48.png",
-            "128": "icon128.png"
-        }
-    },
-    "background": {
-        "service_worker": "background.js"
-    },
-    "web_accessible_resources": [
-        {
-            "resources": [
-                "images/icon.png"
-            ],
-            "matches": [
-                "<all_urls>"
-            ]
-        }
-    ],
-    "content_scripts": [
-        {
-            "matches": [
-                "http://*/*",
-                "https://*/*"
-            ],
-            "js": [
-                "content.js"
-            ]
-        }
-    ],
-    "permissions": [
-        "storage",
-        "tabs",
-        "scripting",
-        "identity"
-    ],
-    "host_permissions": [
-        "https://*.google.com/"
-    ],
-    "homepage_url": "https://appflowy.io"
+  "name": "AppFlowyWebClipper",
+  "description": "AppFlowy Web Clipper",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "index.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["images/icon.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": ["storage", "tabs", "scripting", "identity"],
+  "host_permissions": ["https://*.google.com/", "http://*/*", "https://*/*"],
+  "homepage_url": "https://appflowy.io"
 }

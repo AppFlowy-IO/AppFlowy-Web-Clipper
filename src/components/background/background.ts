@@ -1,7 +1,7 @@
-import { runtime } from 'webextension-polyfill';
+// import { runtime } from 'webextension-polyfill';
 
-runtime.onInstalled.addListener(() => {
-  console.log('[background] loaded ');
-});
+// runtime.onInstalled.addListener(() => {
+//   console.log('[background] loaded ');
+// });
 
-export {};
+// export {};

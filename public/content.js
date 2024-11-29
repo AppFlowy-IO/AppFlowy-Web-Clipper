@@ -1,6 +1,8 @@
 import browser from 'webextension-polyfill';
 
-console.log('content', localStorage.token);
+console.log('content script loaded');
+console.log('current token', localStorage.token);
+
 if (localStorage.token) {
   browser.storage.local.set({ token: localStorage.token })
       .then(() => {

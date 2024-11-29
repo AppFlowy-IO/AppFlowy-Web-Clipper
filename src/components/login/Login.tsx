@@ -51,7 +51,7 @@ export function Login({ redirectTo }: { redirectTo: string }) {
     await storage.local.set({
       auth_flow_active: true,
     });
-    tabs.create({
+    await tabs.create({
       active: true,
       url: `https://appflowy.com/`,
     });

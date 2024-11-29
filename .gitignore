@@ -2,6 +2,7 @@
 
 # NPM
 node_modules/
+.idea/
 
 # Dev
 dev/

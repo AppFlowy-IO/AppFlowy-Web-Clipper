@@ -125,7 +125,7 @@ export class ClientServicesImpl implements UserHttpService, AIService {
     const newToken = response?.data;
 
     if (newToken) {
-      saveRefreshTokenToLocalStorage(JSON.stringify(newToken));
+      await saveRefreshTokenToLocalStorage(JSON.stringify(newToken));
     }
 
     return newToken;

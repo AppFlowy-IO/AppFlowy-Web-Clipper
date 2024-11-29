@@ -1,4 +1,4 @@
-import { PopupContent } from "./PopupContent";
+import { PopupBody } from "./PopupBody.tsx";
 import { PopupHeader } from "./PopupHeader";
 
 export function PopupContainer() {
@@ -7,7 +7,7 @@ export function PopupContainer() {
       <div className="flex items-center flex-shrink-0 text-gray-600 mr-26">
         <span className="font-semibold text-10xl">
           <PopupHeader />
-          <PopupContent />
+          <PopupBody />
       </span>
       </div>
     </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { storage } from 'webextension-polyfill';
 
-export function PopupContent() {
+export function PopupBody() {
   const [user_data, set_user_data] = useState<any>(null);
   useEffect(() => {
     async function check_auth() {

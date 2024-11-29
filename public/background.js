@@ -1,1 +1,1 @@
-console.log('background');
+console.log('background script loaded');

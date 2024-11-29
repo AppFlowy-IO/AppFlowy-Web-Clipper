@@ -1,13 +1,13 @@
 import { storage } from 'webextension-polyfill';
 import { emit, EventType } from './event';
 
-export function saveRefreshTokenToLocalStorage(token: string) {
-  localStorage.removeItem('token');
-  localStorage.setItem('token', token);
+export async function saveRefreshTokenToLocalStorage(token: string) {
+  await storage.local.remove('token');
+  await storage.local.set({ 'token': token });
 }
 
-export function invalidToken() {
-  localStorage.removeItem('token');
+export async function invalidToken() {
+  await storage.local.remove('token');
   emit(EventType.SESSION_INVALID);
 }
 

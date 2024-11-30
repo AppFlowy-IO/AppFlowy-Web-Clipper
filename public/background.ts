@@ -66,7 +66,7 @@ browser.runtime.onMessage.addListener((request: unknown, sender: browser.Runtime
 		if (typedRequest.action === "sidePanelOpened") {
 			browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
 				if (tabs[0] && tabs[0].windowId) {
-					updateCurrentActiveTab(tabs[0].windowId);
+					updateCurrentActiveTab(tabs[0]);
 				}
 			});
 			return true;
@@ -112,7 +112,11 @@ async function setupTabListeners() {
 
 async function handleTabChange(activeInfo: { tabId: number; windowId?: number }) {
 	if (activeInfo.windowId) {
-		updateCurrentActiveTab(activeInfo.windowId);
+		browser.tabs.query({ active: true, windowId: activeInfo.windowId }).then((tabs) => {
+			if (tabs[0]) {
+				updateCurrentActiveTab(tabs[0]);
+			}
+		});
 	}
 }
 

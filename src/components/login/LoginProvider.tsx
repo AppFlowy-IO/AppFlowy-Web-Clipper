@@ -13,22 +13,22 @@ function LoginProvider ({ redirectTo, callback }: { redirectTo: string; callback
   const options = useMemo(
     () => [
       {
-        label: i18next.t('web.continueWithGoogle'),
+        label: i18next.t('auth.continueWithGoogle'),
         Icon: GoogleSvg,
         value: 'google',
       },
       {
-        label: i18next.t('web.continueWithApple'),
+        label: i18next.t('auth.continueWithApple'),
         Icon: AppleSvg,
         value: 'apple',
       },
       {
-        label: i18next.t('web.continueWithGithub'),
+        label: i18next.t('auth.continueWithGithub'),
         value: 'github',
         Icon: GithubSvg,
       },
       {
-        label: i18next.t('web.continueWithDiscord'),
+        label: i18next.t('auth.continueWithDiscord'),
         value: 'discord',
         Icon: DiscordSvg,
       },
@@ -58,7 +58,7 @@ function LoginProvider ({ redirectTo, callback }: { redirectTo: string; callback
         await callback(url);
       }
     } catch (e) {
-      notify.error(i18next.t('web.signInError'));
+      notify.error(i18next.t('auth.signInError'));
     }
   }, [userService, redirectTo]);
 
@@ -89,7 +89,7 @@ function LoginProvider ({ redirectTo, callback }: { redirectTo: string; callback
         className={'text-sm w-full flex gap-2 items-center hover:bg-transparent hover:text-text-title font-medium text-text-caption'}
       >
         <Divider className={'flex-1'} />
-        {i18next.t('web.moreOptions')}
+        {i18next.t('auth.moreOptions')}
         <Divider className={'flex-1'} />
       </Button>}
 

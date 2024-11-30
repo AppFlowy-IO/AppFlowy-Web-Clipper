@@ -13,7 +13,7 @@ function MagicLink ({ redirectTo }: { redirectTo: string }) {
     const isValidEmail = isEmail(email);
 
     if (!isValidEmail) {
-      notify.error(i18next.t('signIn.invalidEmail'));
+      notify.error(i18next.t('auth.invalidEmail'));
       return;
     }
 
@@ -24,9 +24,9 @@ function MagicLink ({ redirectTo }: { redirectTo: string }) {
         email,
         redirectTo,
       });
-      notify.success(i18next.t('signIn.magicLinkSent'));
+      notify.success(i18next.t('auth.magicLinkSent'));
     } catch (e) {
-      notify.error(i18next.t('web.signInError'));
+      notify.error(i18next.t('auth.signInError'));
     } finally {
       setLoading(false);
     }
@@ -38,7 +38,7 @@ function MagicLink ({ redirectTo }: { redirectTo: string }) {
         value={email}
         type={'email'}
         className={'h-[46px] w-[380px] rounded-[12px] py-[15px] px-[20px] text-base max-sm:w-full'}
-        placeholder={i18next.t('signIn.pleaseInputYourEmail') || 'Please input your email'}
+        placeholder={i18next.t('auth.pleaseInputYourEmail') || 'Please input your email'}
         inputProps={{
           className: 'px-0 py-0',
         }}
@@ -56,7 +56,7 @@ function MagicLink ({ redirectTo }: { redirectTo: string }) {
             {i18next.t('editor.loading')}...
           </>
         ) : (
-          i18next.t('web.continue')
+          i18next.t('auth.continue')
         )}
       </Button>
     </div>

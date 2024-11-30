@@ -1,6 +1,6 @@
 {
-  "name": "AppFlowyWebClipper",
-  "description": "AppFlowy Web Clipper",
+  "name": "AppFlowy: AI Web Clipper",
+  "description": "AppFlowy AI Web Clipper",
   "version": "0.0.1",
   "manifest_version": 3,
   "icons": {

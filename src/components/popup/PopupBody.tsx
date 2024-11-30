@@ -41,6 +41,8 @@ export function PopupBody() {
               });
               // @ts-ignore
               chrome.sidePanel.open({ tabId: tab_data.id });
+
+            window.close();
             });
           }}
         >

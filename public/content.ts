@@ -5,6 +5,13 @@ let browser = chrome;
 console.log('content script loaded');
 console.log('current token', localStorage.token);
 
+browser.runtime.onMessage.addListener((request: any, sender, sendResponse) => {
+  if (request.action === "ping") {
+    sendResponse({});
+    return true;
+  }
+});
+
 if (localStorage.token) {
   browser.storage.local.get(['auth_flow_active']).then((storage_data) => {
     if (storage_data.auth_flow_active) {

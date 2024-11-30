@@ -3,7 +3,7 @@ import { emit, EventType } from './event';
 
 export async function saveRefreshTokenToLocalStorage(token: string) {
   await storage.local.remove('token');
-  await storage.local.set({ 'token': token });
+  await storage.local.set({ token: token });
 }
 
 export async function invalidToken() {

@@ -17,7 +17,8 @@
     }
   },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "web_accessible_resources": [
     {
@@ -31,7 +32,7 @@
       "js": ["content.js"]
     }
   ],
-  "permissions": ["storage", "scripting", "sidePanel"],
+  "permissions": ["storage", "scripting", "sidePanel", "activeTab", "contextMenus"],
   "host_permissions": ["https://*.google.com/", "http://*/*", "https://*/*"],
   "homepage_url": "https://appflowy.io"
 }

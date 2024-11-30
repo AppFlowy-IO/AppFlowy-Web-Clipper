@@ -28,6 +28,8 @@ export default defineConfig({
     outDir: 'dist',
     rollupOptions: {
       input: {
+        background: 'public/background.ts',
+        content: 'public/content.ts',
         popup: './index.html',
       },
       output: {
@@ -35,12 +37,5 @@ export default defineConfig({
         manualChunks: undefined,
       },
     },
-  },
-  // https://vite.dev/config/server-options#server-cors
-  server: {
-    watch: {
-      ignored: ['node_modules'],
-    },
-    cors: false,
   },
 });

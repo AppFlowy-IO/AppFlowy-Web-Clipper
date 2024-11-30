@@ -13,10 +13,14 @@ import { hasToken } from '@/services/session';
 import { on } from '@/services/session/event';
 import { EventType } from '@/services/session/event';
 import { LoginPage } from '@/components/login';
+import browser from "webextension-polyfill";
 
 export const RCApplicationContext = createContext<
   ApplicationContext | undefined
 >(undefined);
+
+type MessageListener = (request: any, sender: browser.Runtime.MessageSender, sendResponse: (response?: any) => void) => true | undefined;
+
 
 function ApplicationContextProvider({
   children,
@@ -32,6 +36,7 @@ function ApplicationContextProvider({
   const serviceImpl = useMemo(() => new ClientServicesImpl(config), [config]);
   const userSession = useMemo(() => new UserSessionImpl(), []);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(true);
+  const [currentTabId, setCurrentTabId] = useState<number | undefined>();
 
   const [loginOpen, setLoginOpen] = useState(false);
   const showLoginPage = useCallback((redirectTo?: string) => {
@@ -65,10 +70,50 @@ function ApplicationContextProvider({
     });
   }, []);
 
+  useEffect(() => {
+    let listener: MessageListener | undefined;
+    if (isAuthenticated) {
+      console.log('setting up application listener');
+      listener = setupMessageListeners();
+      browser.runtime.onMessage.addListener(listener);
+    }
+
+    return () => {
+      if (listener) {
+        console.log('removing application listener');
+        browser.runtime.onMessage.removeListener(listener);
+      }
+    };
+  }, [isAuthenticated]);
+
+  function setupMessageListeners(): MessageListener {
+    const listener = (request: any, _sender: browser.Runtime.MessageSender, _sendResponse: (response?: any) => void): true | undefined => {
+      if (request.action === "tabUrlChanged") {
+        if (request.tabId === currentTabId) {
+          if (currentTabId !== undefined) {
+            console.log('tabUrlChanged', currentTabId);
+          }
+        }
+      } else if (request.action === "activeTabChanged") {
+        setCurrentTabId(request.tabId);
+        if (request.isValidUrl) {
+          if (currentTabId !== undefined) {
+            console.log('activeTabChanged', currentTabId);
+          }
+        } else if (request.isBlankPage) {
+          console.log('isBlankPage', currentTabId);
+        }
+      }
+      return undefined;
+    };
+    return listener; 
+  }
+
   return (
     <RCApplicationContext.Provider
       value={{
         isAuthenticated,
+        currentTabId,
         userHttpService: serviceImpl,
         userSession: userSession,
         showLoginPage: showLoginPage,

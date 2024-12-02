@@ -1,4 +1,3 @@
-import { notify } from '@/components/shared/notify';
 import { RCApplicationContext } from '@/components/app/AppContextProvider';
 import { Button, Collapse, Divider } from '@mui/material';
 import React, { useCallback, useContext, useMemo } from 'react';
@@ -65,7 +64,8 @@ function LoginProvider({
           await callback(url);
         }
       } catch (e) {
-        notify.error(i18next.t('auth.signInError'));
+        // TODO: handle error
+        console.error(e);
       }
     },
     [userService, redirectTo]

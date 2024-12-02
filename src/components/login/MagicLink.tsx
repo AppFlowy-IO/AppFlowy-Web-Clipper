@@ -1,4 +1,3 @@
-import { notify } from '@/components/shared/notify';
 import { RCApplicationContext } from '@/components/app/AppContextProvider';
 import { Button, CircularProgress, OutlinedInput } from '@mui/material';
 import React, { useContext } from 'react';
@@ -13,7 +12,8 @@ function MagicLink({ redirectTo }: { redirectTo: string }) {
     const isValidEmail = isEmail(email);
 
     if (!isValidEmail) {
-      notify.error(i18next.t('auth.invalidEmail'));
+      // TODO: handle error
+      console.error(i18next.t('auth.invalidEmail'));
       return;
     }
 
@@ -24,9 +24,10 @@ function MagicLink({ redirectTo }: { redirectTo: string }) {
         email,
         redirectTo,
       });
-      notify.success(i18next.t('auth.magicLinkSent'));
+      // TODO: handle success
     } catch (e) {
-      notify.error(i18next.t('auth.signInError'));
+      // TODO: handle error
+      console.error(e);
     } finally {
       setLoading(false);
     }

@@ -1,5 +1,7 @@
 @use 'src/styles/mixin.scss';
 @use 'src/styles/popup.scss';
+@use 'src/styles/chat.scss';
+@use 'src/styles/settings.scss';
 
 * {
   -webkit-tap-highlight-color: transparent;

@@ -14,17 +14,15 @@
 
       .menu-item {
         padding: 6px;
-        cursor: pointer;
         transition: background-color 0.3s;
 
         &:hover {
-          background-color: #e0e0e0;
+          background-color: lightgray;
         }
 
-        // &.active {
-        //   background-color: red;
-        //   color: white;
-        // }
+        &.active {
+          background-color: lightgray;
+        }
       }
     }
   }

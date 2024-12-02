@@ -28,7 +28,10 @@
   ],
   "content_scripts": [
     {
-      "matches": ["https://appflowy.com/*"],
+      "matches": [
+				"http://*/*",
+				"https://*/*"
+			],
       "js": ["content.js"]
     }
   ],

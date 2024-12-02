@@ -15,7 +15,7 @@ export async function ensureContentScriptLoaded(tabId: number): Promise<void> {
     }
 
     // Attempt to send a message to the content script
-    await browser.tabs.sendMessage(tabId, { action: 'ping' });
+    await browser.runtime.sendMessage(tabId, { action: 'ping' });
   } catch (error) {
     // If the message fails, the content script is not loaded, so inject it
     console.log('Content script not loaded, injecting...');

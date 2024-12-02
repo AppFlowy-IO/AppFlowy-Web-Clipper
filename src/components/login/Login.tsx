@@ -3,7 +3,8 @@ import { useEffect } from 'react';
 import { Button } from '@mui/material';
 import i18next from 'i18next';
 import { AUTH_CALLBACK_URL } from '@/services/service_impl';
-import { storage, tabs } from 'webextension-polyfill';
+import { tabs } from 'webextension-polyfill';
+import browser from 'webextension-polyfill';
 
 export function LoginPage() {
   return (
@@ -18,10 +19,12 @@ export function Login({ redirectTo }: { redirectTo: string }) {
     if (process.env.NODE_ENV === 'development') {
       console.log('Redirect to URL:', redirectTo);
     }
+
+    console.log('Token:', localStorage.getItem('token'));
   }, [redirectTo]);
 
   async function signInWithAppFlowy() {
-    await storage.local.set({
+    await browser.storage.local.set({
       auth_flow_active: true,
     });
     await tabs.create({

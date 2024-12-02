@@ -24,10 +24,6 @@ export class ClientServicesImpl implements UserHttpService, AIService {
   private gotrueClient: AxiosInstance;
 
   constructor(config: ApplicationConfig) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.log('API Client Config', config);
-    }
-
     this.gotrueClient = axios.create({
       baseURL: config.gotrueUrl,
       headers: {

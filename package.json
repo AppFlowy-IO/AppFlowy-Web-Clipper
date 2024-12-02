@@ -11,8 +11,7 @@
     "build": "tsc && vite build",
     "watch": "NODE_ENV=development vite build --watch",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-    "preview": "vite preview"
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "dependencies": {
     "@chatscope/chat-ui-kit-react": "^2.0.3",

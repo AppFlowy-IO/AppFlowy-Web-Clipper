@@ -1,11 +1,11 @@
 import { Routes, Route, Navigate, HashRouter } from 'react-router-dom';
-import ApplicationContextProvider from '@/components/app/AppContextProvider';
+import ApplicationContextProvider from '@/AppContextProvider';
 import { Suspense } from 'react';
 import { Popup } from '@/components/popup';
 import { LoginPage } from '@/components/login';
 
 import { SidePanel } from '@/components/side_panel/SidePanel';
-import { AuthRedirect } from '@/components/app/AuthRedirect';
+import { AuthRedirect } from '@/AuthRedirect';
 import { Settings } from '@/components/settings/Settings';
 
 import '@/styles/app.scss';

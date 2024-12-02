@@ -1,6 +1,6 @@
 import LinearBuffer from '@/components/login/LinearBuffer';
 import { useContext, useEffect, useState } from 'react';
-import { RCApplicationContext } from '@/components/app/AppContextProvider';
+import { RCApplicationContext } from '@/AppContextProvider';
 import { useNavigate } from 'react-router-dom';
 import { EventType } from '@/services/session';
 import { emit } from '@/services/session';

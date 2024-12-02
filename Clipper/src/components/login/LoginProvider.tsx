@@ -1,4 +1,4 @@
-import { RCApplicationContext } from '@/components/app/AppContextProvider';
+import { RCApplicationContext } from '@/AppContextProvider';
 import { Button, Collapse, Divider } from '@mui/material';
 import React, { useCallback, useContext, useMemo } from 'react';
 import { ReactComponent as GoogleSvg } from '@/assets/login/google.svg';

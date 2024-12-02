@@ -1,4 +1,4 @@
-import { RCApplicationContext } from '@/components/app/AppContextProvider';
+import { RCApplicationContext } from '@/AppContextProvider';
 import { Button, CircularProgress, OutlinedInput } from '@mui/material';
 import React, { useContext } from 'react';
 import isEmail from 'validator/lib/isEmail';

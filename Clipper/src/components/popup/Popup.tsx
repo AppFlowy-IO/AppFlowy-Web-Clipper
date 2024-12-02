@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useContext } from 'react';
-import { RCApplicationContext } from '@/components/app/AppContextProvider';
+import { RCApplicationContext } from '@/AppContextProvider';
 import { PopupContainer } from './PopupContainer';
 
 export function Popup() {

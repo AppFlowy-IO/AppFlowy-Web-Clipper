@@ -22,8 +22,18 @@ export interface InfoProps {
 export type InfoSnackbarProps = InfoProps & CustomContentProps;
 
 const InfoSnackbar = forwardRef<HTMLDivElement, InfoSnackbarProps>(
-  ({ showActions = true, type = 'info', onOk, okText, title, message, onClose }, ref) => {
-
+  (
+    {
+      showActions = true,
+      type = 'info',
+      onOk,
+      okText,
+      title,
+      message,
+      onClose,
+    },
+    ref
+  ) => {
     const handleClose = () => {
       onClose?.();
       notify.clear();
@@ -31,14 +41,31 @@ const InfoSnackbar = forwardRef<HTMLDivElement, InfoSnackbarProps>(
 
     return (
       <SnackbarContent ref={ref} className={'flex items-center justify-center'}>
-        <Paper className={`relative flex flex-col gap-4 border p-5 ${getBorderColor(type)}`}>
-          <div className={'flex w-full items-center justify-between text-base font-medium'}>
-            <div className={'flex flex-1 items-center gap-2 text-left font-semibold'}>
+        <Paper
+          className={`relative flex flex-col gap-4 border p-5 ${getBorderColor(
+            type
+          )}`}
+        >
+          <div
+            className={
+              'flex w-full items-center justify-between text-base font-medium'
+            }
+          >
+            <div
+              className={
+                'flex flex-1 items-center gap-2 text-left font-semibold'
+              }
+            >
               {getIcon(type)}
               <div>{title}</div>
             </div>
             <div className={'relative -right-1.5'}>
-              <IconButton size={'small'} color={'inherit'} className={'h-6 w-6'} onClick={handleClose}>
+              <IconButton
+                size={'small'}
+                color={'inherit'}
+                className={'h-6 w-6'}
+                onClick={handleClose}
+              >
                 <CloseIcon className={'h-4 w-4'} />
               </IconButton>
             </div>
@@ -54,7 +81,9 @@ const InfoSnackbar = forwardRef<HTMLDivElement, InfoSnackbarProps>(
                   onOk?.();
                   handleClose();
                 }}
-                className={`${getButtonBgColor(type)} ${getButtonHoverBgColor(type)}}`}
+                className={`${getButtonBgColor(type)} ${getButtonHoverBgColor(
+                  type
+                )}}`}
               >
                 {okText || i18next.t('button.ok')}
               </Button>
@@ -71,13 +100,19 @@ export default InfoSnackbar;
 function getIcon(type: 'success' | 'info' | 'warning' | 'error') {
   switch (type) {
     case 'success':
-      return <CheckCircle className={'h-6 w-6 text-[var(--function-success)]'} />;
+      return (
+        <CheckCircle className={'h-6 w-6 text-[var(--function-success)]'} />
+      );
     case 'info':
       return '';
     case 'warning':
-      return <WarningAmber className={'h-6 w-6 text-[var(--function-warning)]'} />;
+      return (
+        <WarningAmber className={'h-6 w-6 text-[var(--function-warning)]'} />
+      );
     case 'error':
-      return <ErrorOutline className={'h-6 w-6 text-[var(--function-error)]'} />;
+      return (
+        <ErrorOutline className={'h-6 w-6 text-[var(--function-error)]'} />
+      );
   }
 }
 

@@ -13,14 +13,17 @@ import { hasToken } from '@/services/session';
 import { on } from '@/services/session/event';
 import { EventType } from '@/services/session/event';
 import { LoginPage } from '@/components/login';
-import browser from "webextension-polyfill";
+import browser from 'webextension-polyfill';
 
 export const RCApplicationContext = createContext<
   ApplicationContext | undefined
 >(undefined);
 
-type MessageListener = (request: any, sender: browser.Runtime.MessageSender, sendResponse: (response?: any) => void) => true | undefined;
-
+type MessageListener = (
+  request: any,
+  sender: browser.Runtime.MessageSender,
+  sendResponse: (response?: any) => void
+) => true | undefined;
 
 function ApplicationContextProvider({
   children,
@@ -87,14 +90,18 @@ function ApplicationContextProvider({
   }, [isAuthenticated]);
 
   function setupMessageListeners(): MessageListener {
-    const listener = (request: any, _sender: browser.Runtime.MessageSender, _sendResponse: (response?: any) => void): true | undefined => {
-      if (request.action === "tabUrlChanged") {
+    const listener = (
+      request: any,
+      _sender: browser.Runtime.MessageSender,
+      _sendResponse: (response?: any) => void
+    ): true | undefined => {
+      if (request.action === 'tabUrlChanged') {
         if (request.tabId === currentTabId) {
           if (currentTabId !== undefined) {
             console.log('tabUrlChanged', currentTabId);
           }
         }
-      } else if (request.action === "activeTabChanged") {
+      } else if (request.action === 'activeTabChanged') {
         setCurrentTabId(request.tabId);
         if (request.isValidUrl) {
           if (currentTabId !== undefined) {
@@ -106,7 +113,7 @@ function ApplicationContextProvider({
       }
       return undefined;
     };
-    return listener; 
+    return listener;
   }
 
   return (

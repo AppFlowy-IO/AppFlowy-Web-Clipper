@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import path from 'path';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
+import hotReloadExtension from 'hot-reload-extension-vite';
+
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,6 +18,10 @@ export default defineConfig({
         titleProp: true,
       },
     }),
+    hotReloadExtension({
+      log: true,
+      backgroundPath: 'public/background.ts',
+    })
   ],
   resolve: {
     alias: [

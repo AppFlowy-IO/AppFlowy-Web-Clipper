@@ -37,9 +37,11 @@ export function Login({ redirectTo }: { redirectTo: string }) {
       <Button
         onClick={signInWithAppFlowy}
         variant={'contained'}
-        className={'flex h-[46px] w-[380px] items-center justify-center gap-2 rounded-[12px] text-base max-sm:w-full'}
+        className={
+          'flex h-[46px] w-[380px] items-center justify-center gap-2 rounded-[12px] text-base max-sm:w-full'
+        }
       >
-      { i18next.t('auth.signInWithAppFlowy') }
+        {i18next.t('auth.signInWithAppFlowy')}
       </Button>
     </div>
   );

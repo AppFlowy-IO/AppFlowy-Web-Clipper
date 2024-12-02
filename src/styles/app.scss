@@ -1,21 +1,19 @@
-@use "src/styles/mixin.scss";
-@use "src/styles/popup.scss";
+@use 'src/styles/mixin.scss';
+@use 'src/styles/popup.scss';
 
 * {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
 
-
 .login-page {
   height: max(var(--chromium-popup-height), 100vh);
-	width: var(--popup-width);
+  width: var(--popup-width);
   padding: 16px;
   scrollbar-width: none;
   align-items: center;
   justify-content: center;
 }
-
 
 body {
   ::selection {
@@ -23,10 +21,9 @@ body {
   }
 
   @apply bg-bg-body text-text-title;
-
 }
 
-
 .icon {
-  font-family: 'Apple Color Emoji', 'Noto Color Emoji', 'Segoe UI Emoji', 'Twemoji Mozilla', sans-serif;
+  font-family: 'Apple Color Emoji', 'Noto Color Emoji', 'Segoe UI Emoji',
+    'Twemoji Mozilla', sans-serif;
 }

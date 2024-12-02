@@ -8,7 +8,13 @@ import { ReactComponent as DiscordSvg } from '@/assets/login/discord.svg';
 import { ReactComponent as AppleSvg } from '@/assets/login/apple.svg';
 import i18next from 'i18next';
 
-function LoginProvider ({ redirectTo, callback }: { redirectTo: string; callback: (url: string) => Promise<void> }) {
+function LoginProvider({
+  redirectTo,
+  callback,
+}: {
+  redirectTo: string;
+  callback: (url: string) => Promise<void>;
+}) {
   const [expand, setExpand] = React.useState(false);
   const options = useMemo(
     () => [
@@ -33,68 +39,80 @@ function LoginProvider ({ redirectTo, callback }: { redirectTo: string; callback
         Icon: DiscordSvg,
       },
     ],
-    [],
+    []
   );
   const userService = useContext(RCApplicationContext)?.userHttpService;
 
-  const handleClick = useCallback(async (option: string) => {
-    try {
-      let url;
-      switch (option) {
-        case 'google':
-          url = await userService?.signInGoogle({ redirectTo });
-          break;
-        case 'apple':
-          url = await userService?.signInApple({ redirectTo });
-          break;
-        case 'github':
-          url = await userService?.signInGithub({ redirectTo });
-          break;
-        case 'discord':
-          url = await userService?.signInDiscord({ redirectTo });
-          break;
+  const handleClick = useCallback(
+    async (option: string) => {
+      try {
+        let url;
+        switch (option) {
+          case 'google':
+            url = await userService?.signInGoogle({ redirectTo });
+            break;
+          case 'apple':
+            url = await userService?.signInApple({ redirectTo });
+            break;
+          case 'github':
+            url = await userService?.signInGithub({ redirectTo });
+            break;
+          case 'discord':
+            url = await userService?.signInDiscord({ redirectTo });
+            break;
+        }
+        if (url) {
+          await callback(url);
+        }
+      } catch (e) {
+        notify.error(i18next.t('auth.signInError'));
       }
-      if (url) {
-        await callback(url);
-      }
-    } catch (e) {
-      notify.error(i18next.t('auth.signInError'));
-    }
-  }, [userService, redirectTo]);
+    },
+    [userService, redirectTo]
+  );
 
-  const renderOption = useCallback((option: typeof options[0]) => {
-
-    return <Button
-      key={option.value}
-      color={'inherit'}
-      variant={'outlined'}
-      onClick={() => handleClick(option.value)}
-      className={
-        `flex h-[46px] w-full items-center justify-center gap-[10px] rounded-[12px] border border-line-divider text-sm font-medium  max-sm:w-full text-text-title`
-      }
-    >
-      <option.Icon className={'w-[24px] h-[24px]'} />
-      <div className={'w-auto whitespace-pre'}>{option.label}</div>
-
-    </Button>;
-  }, [handleClick]);
+  const renderOption = useCallback(
+    (option: (typeof options)[0]) => {
+      return (
+        <Button
+          key={option.value}
+          color={'inherit'}
+          variant={'outlined'}
+          onClick={() => handleClick(option.value)}
+          className={`flex h-[46px] w-full items-center justify-center gap-[10px] rounded-[12px] border border-line-divider text-sm font-medium  text-text-title max-sm:w-full`}
+        >
+          <option.Icon className={'h-[24px] w-[24px]'} />
+          <div className={'w-auto whitespace-pre'}>{option.label}</div>
+        </Button>
+      );
+    },
+    [handleClick]
+  );
 
   return (
-    <div className={'flex w-full flex-col items-center justify-center gap-[10px]'}>
+    <div
+      className={'flex w-full flex-col items-center justify-center gap-[10px]'}
+    >
       {options.slice(0, 2).map(renderOption)}
-      {!expand && <Button
-        color={'inherit'}
-        size={'small'}
-        onClick={() => setExpand(!expand)}
-        className={'text-sm w-full flex gap-2 items-center hover:bg-transparent hover:text-text-title font-medium text-text-caption'}
-      >
-        <Divider className={'flex-1'} />
-        {i18next.t('auth.moreOptions')}
-        <Divider className={'flex-1'} />
-      </Button>}
+      {!expand && (
+        <Button
+          color={'inherit'}
+          size={'small'}
+          onClick={() => setExpand(!expand)}
+          className={
+            'flex w-full items-center gap-2 text-sm font-medium text-text-caption hover:bg-transparent hover:text-text-title'
+          }
+        >
+          <Divider className={'flex-1'} />
+          {i18next.t('auth.moreOptions')}
+          <Divider className={'flex-1'} />
+        </Button>
+      )}
 
       <Collapse className={'w-full'} in={expand}>
-        <div className={'gap-[10px] w-full flex-col flex'}>{options.slice(2).map(renderOption)}</div>
+        <div className={'flex w-full flex-col gap-[10px]'}>
+          {options.slice(2).map(renderOption)}
+        </div>
       </Collapse>
     </div>
   );

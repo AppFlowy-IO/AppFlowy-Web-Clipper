@@ -1,9 +1,7 @@
 // FIXME: add support for firefox and safari
 // add webpack to enable this type of importing
-// import browser from 'webextension-polyfill';
-let browser = chrome;
-console.log('content script loaded');
-console.log('current token', localStorage.token);
+
+import browser from 'webextension-polyfill';
 
 browser.runtime.onMessage.addListener((request: any, sender, sendResponse) => {
   if (request.action === "ping") {

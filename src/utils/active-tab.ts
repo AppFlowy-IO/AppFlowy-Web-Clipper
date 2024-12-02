@@ -1,7 +1,6 @@
 import browser from 'webextension-polyfill';
 import { ensureContentScriptLoaded } from './content-script';
 
-
 // @ts-ignore
 
 export async function updateCurrentActiveTab(tab: browser.Tabs.Tab) {

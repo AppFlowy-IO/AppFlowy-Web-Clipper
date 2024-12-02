@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { EventType } from '@/services/session';
 import { emit } from '@/services/session';
 
-function LoginAuth () {
+function LoginAuth() {
   const httpService = useContext(RCApplicationContext)?.userHttpService;
   const [loading, setLoading] = useState<boolean>(false);
   //FIXME: show error message
@@ -32,13 +32,17 @@ function LoginAuth () {
     })();
   }, [httpService]);
 
-  return <>
-    {loading ? (
-      <div className={'flex h-screen w-screen items-center justify-center p-20'}>
-        <LinearBuffer />
-      </div>
-    ) : null}
-  </>;
+  return (
+    <>
+      {loading ? (
+        <div
+          className={'flex h-screen w-screen items-center justify-center p-20'}
+        >
+          <LinearBuffer />
+        </div>
+      ) : null}
+    </>
+  );
 }
 
 export default LoginAuth;

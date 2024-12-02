@@ -4,9 +4,9 @@ import { Suspense } from 'react';
 import { Popup } from '@/components/popup';
 import { LoginPage } from '@/components/login';
 
-import { SidePanel } from './SidePanel';
-import { AuthRedirect } from './AuthRedirect';
-import { Settings } from './Settings';
+import { SidePanel } from '@/components/side_panel/SidePanel';
+import { AuthRedirect } from '@/components/app/AuthRedirect';
+import { Settings } from '@/components/settings/Settings';
 
 import '@/styles/app.scss';
 

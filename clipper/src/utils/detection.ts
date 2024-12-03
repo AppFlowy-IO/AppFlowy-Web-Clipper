@@ -4,13 +4,6 @@ interface NavigatorExtended extends Navigator {
   };
 }
 
-function isIPad(): boolean {
-  return (
-    navigator.userAgent.includes('iPad') ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-  );
-}
-
 export async function detectBrowser(): Promise<
   | 'chrome'
   | 'firefox'
@@ -19,7 +12,6 @@ export async function detectBrowser(): Promise<
   | 'edge'
   | 'safari'
   | 'mobile-safari'
-  | 'ipad-os'
   | 'other'
 > {
   const userAgent = navigator.userAgent.toLowerCase();
@@ -36,13 +28,23 @@ export async function detectBrowser(): Promise<
     }
     return 'chrome';
   } else if (userAgent.includes('safari')) {
-    if (isIPad()) {
-      return 'ipad-os';
-    } else if (userAgent.includes('mobile') || userAgent.includes('iphone')) {
+    if (userAgent.includes('mobile') || userAgent.includes('iphone')) {
       return 'mobile-safari';
     }
     return 'safari';
   } else {
     return 'other';
   }
+}
+
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null;
+  return function (this: any, ...args: Parameters<T>) {
+    const context = this;
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
 }

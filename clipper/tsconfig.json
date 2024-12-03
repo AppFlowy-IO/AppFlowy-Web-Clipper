@@ -13,14 +13,15 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "ESNext",
-    "types": ["vite-plugin-svgr"],
+    "types": [
+      "vite-plugin-svgr"
+    ],
     "moduleResolution": "node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
@@ -34,16 +35,22 @@
       ],
       "src/*": [
         "src/*"
-      ],
-    },
+      ]
+    }
   },
   "include": [
-    "src", "vite.config.ts"
+    "src",
+    "vite.config.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "vite.config.ts"
+    "vite.config.ts",
+    "tests"
   ],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ]
 }

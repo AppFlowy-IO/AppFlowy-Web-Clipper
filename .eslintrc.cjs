@@ -1,11 +1,15 @@
 module.exports = {
-  // https://eslint.org/docs/latest/use/configure/configuration-files
   env: {
     browser: true,
     es6: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react/recommended',
+    'plugin:prettier/recommended'
+  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: 'tsconfig.json',
@@ -13,7 +17,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     extraFileExtensions: ['.json'],
   },
-  plugins: ['@typescript-eslint', 'react-hooks'],
+  plugins: ['@typescript-eslint', 'react-hooks', 'react'],
   rules: {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
@@ -66,8 +70,12 @@ module.exports = {
       { blankLine: 'any', prev: 'import', next: 'import' },
       { blankLine: 'always', prev: 'block-like', next: '*' },
       { blankLine: 'always', prev: 'block', next: '*' },
-
     ],
+  },
+  settings: {
+    react: {
+      version: 'detect',
+    },
   },
   ignorePatterns: ['src/**/*.test.ts', '**/__tests__/**/*.json', 'package.json', '__mocks__/*.ts'],
 };

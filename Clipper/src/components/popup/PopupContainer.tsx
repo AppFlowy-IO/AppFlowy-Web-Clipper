@@ -1,5 +1,5 @@
 import { PopupBody } from './PopupBody.tsx';
-import { PopupHeader } from './PopupHeader';
+import { PopupHeader } from './PopupHeader.tsx';
 
 export function PopupContainer() {
   return (

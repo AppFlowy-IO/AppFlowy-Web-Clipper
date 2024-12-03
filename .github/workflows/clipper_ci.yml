@@ -22,10 +22,13 @@ jobs:
         node-version: '18'
 
     - name: Install dependencies
+      working-directory: ./clipper
       run: pnpm install
 
     - name: Run build
+      working-directory: ./clipper
       run: pnpm run build
 
     - name: Run Prettier
+      working-directory: ./clipper
       run: pnpm run format -- --check

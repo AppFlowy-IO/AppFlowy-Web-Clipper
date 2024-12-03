@@ -1,10 +1,9 @@
-
 // FIXME: add support for firefox and safari
 // add webpack to enable this type of importing
 // @ts-ignore
-let browser = chrome
+let browser = chrome;
 browser.runtime.onMessage.addListener((request: any, sender, sendResponse) => {
-  if (request.action === "ping") {
+  if (request.action === 'ping') {
     sendResponse({});
     return true;
   }

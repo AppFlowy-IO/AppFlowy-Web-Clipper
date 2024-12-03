@@ -18,10 +18,10 @@ export default defineConfig({
         titleProp: true,
       },
     }),
-    // hotReloadExtension({
-    //   log: true,
-    //   backgroundPath: 'public/background.ts',
-    // })
+    hotReloadExtension({
+      log: true,
+      backgroundPath: 'public/background.ts',
+    })
   ],
   resolve: {
     alias: [

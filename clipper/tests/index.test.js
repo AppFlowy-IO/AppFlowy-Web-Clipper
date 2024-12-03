@@ -1,7 +1,5 @@
 const puppeteer = require('puppeteer');
-
-const EXTENSION_PATH = '../dist';
-const EXTENSION_ID = 'bnhhcpdgpabghbipjeocenbhompjlmll';
+const { EXTENSION_PATH, EXTENSION_ID } = require('./util');
 
 let browser;
 
@@ -45,5 +43,4 @@ test('popup renders correctly', async () => {
   }
 
   await page.close();
-  await browser.close();
 });

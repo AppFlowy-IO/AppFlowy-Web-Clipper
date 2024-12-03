@@ -9,12 +9,16 @@ browser.runtime.onMessage.addListener((request: any, sender, sendResponse) => {
   }
 });
 
+// Only use this script on appflowy.com
 if (window.location.hostname.endsWith('appflowy.com')) {
   if (localStorage.token) {
     browser.storage.local.get(['auth_flow_active']).then((storage_data) => {
       if (storage_data.auth_flow_active) {
         browser.storage.local
-          .set({ token: localStorage.token, auth_flow_active: false })
+          .set({
+            token: localStorage.token,
+            auth_flow_active: false,
+          })
           .then(() => {
             console.log('Token saved successfully');
             location.href = chrome.runtime.getURL('/index.html#/auth-redirect');

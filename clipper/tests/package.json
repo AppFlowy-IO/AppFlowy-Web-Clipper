@@ -1,0 +1,11 @@
+{
+  "name": "puppeteer-demo",
+  "version": "1.0",
+  "scripts": {
+    "start": "jest ."
+  },
+  "dependencies": {
+    "jest": "^29.7.0",
+    "puppeteer": "^23.9.0"
+  }
+}

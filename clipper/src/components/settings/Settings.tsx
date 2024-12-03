@@ -10,7 +10,6 @@ export function Settings() {
     setActiveTab('General');
   }, []);
 
-
   const openTemplate = useCallback(() => {
     setActiveTab('Template');
   }, []);

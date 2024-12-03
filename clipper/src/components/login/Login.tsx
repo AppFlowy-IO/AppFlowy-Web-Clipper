@@ -64,7 +64,7 @@ function LogoSection() {
 //@ts-ignore
 function TermsSection() {
   return (
-    <div className='mt-6 w-full max-w-[300px] overflow-hidden whitespace-pre-wrap break-words text-center text-[12px] tracking-[0.36px] text-text-caption sm:mt-10'>
+    <div className='text-text-caption mt-6 w-full max-w-[300px] overflow-hidden whitespace-pre-wrap break-words text-center text-[12px] tracking-[0.36px] sm:mt-10'>
       <span>{i18next.t('auth.signInAgreement')} </span>
       <a
         href='https://appflowy.io/terms'

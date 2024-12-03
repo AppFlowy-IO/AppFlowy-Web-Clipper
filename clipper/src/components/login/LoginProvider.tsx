@@ -79,7 +79,7 @@ function LoginProvider({
           color={'inherit'}
           variant={'outlined'}
           onClick={() => handleClick(option.value)}
-          className={`flex h-[46px] w-full items-center justify-center gap-[10px] rounded-[12px] border border-line-divider text-sm font-medium  text-text-title max-sm:w-full`}
+          className={`border-line-divider text-text-title flex h-[46px] w-full items-center justify-center gap-[10px] rounded-[12px] border text-sm  font-medium max-sm:w-full`}
         >
           <option.Icon className={'h-[24px] w-[24px]'} />
           <div className={'w-auto whitespace-pre'}>{option.label}</div>
@@ -100,7 +100,7 @@ function LoginProvider({
           size={'small'}
           onClick={() => setExpand(!expand)}
           className={
-            'flex w-full items-center gap-2 text-sm font-medium text-text-caption hover:bg-transparent hover:text-text-title'
+            'text-text-caption hover:text-text-title flex w-full items-center gap-2 text-sm font-medium hover:bg-transparent'
           }
         >
           <Divider className={'flex-1'} />

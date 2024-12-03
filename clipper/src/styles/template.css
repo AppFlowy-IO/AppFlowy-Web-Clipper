@@ -31,7 +31,7 @@ textarea {
 }
 
 .btn {
-  @apply rounded-xl border border-line-divider px-4 py-3;
+  @apply border-line-divider rounded-xl border px-4 py-3;
 }
 
 .btn-primary {
@@ -39,7 +39,7 @@ textarea {
 }
 
 .input {
-  @apply rounded-xl border border-line-divider px-[18px] py-[14px] text-sm;
+  @apply border-line-divider rounded-xl border px-[18px] py-[14px] text-sm;
 }
 
 th {

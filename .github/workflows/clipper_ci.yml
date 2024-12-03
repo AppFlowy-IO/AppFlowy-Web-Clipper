@@ -20,18 +20,18 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '18' 
-        
+
     - name: Install pnpm
       run: npm install -g pnpm
 
     - name: Install dependencies
-      working-directory: Clipper  
+      working-directory: clipper  
       run: pnpm install
 
     - name: Run build
-      working-directory: Clipper 
+      working-directory: clipper 
       run: pnpm run build
 
     - name: Run Prettier
-      working-directory: Clipper
-      run: pnpm run format -- --check
+      working-directory: clipper
+      run: pnpm run format:check
